@@ -13,13 +13,7 @@
 			"examples"
 		]
 	},
-	"configTemplate": {
-		"telegram_bot_token": {
-			"type": "string",
-			"description": "[Optional] Secret token for connecting to Telegram",
-			"default": ""
-		}
-	},
+	"configTemplate": {},
 	"steamshipRegistry": {
 		"tagline": "",
 		"tagline2": null,

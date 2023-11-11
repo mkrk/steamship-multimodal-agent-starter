@@ -3,15 +3,7 @@ from typing import List, Type
 from pydantic import Field
 from steamship.agents.functional import FunctionsBasedAgent
 from steamship.agents.llms.openai import ChatOpenAI
-from steamship.agents.mixins.transports.slack import (
-    SlackTransport,
-    SlackTransportConfig,
-)
 from steamship.agents.mixins.transports.steamship_widget import SteamshipWidgetTransport
-from steamship.agents.mixins.transports.telegram import (
-    TelegramTransport,
-    TelegramTransportConfig,
-)
 from steamship.agents.schema import Tool
 from steamship.agents.service.agent_service import AgentService
 from steamship.agents.tools.question_answering import VectorSearchQATool
@@ -23,21 +15,6 @@ from steamship.invocable.mixins.indexer_pipeline_mixin import IndexerPipelineMix
 
 
 class DocumentQAAgentService(AgentService):
-    """DocumentQAService is an example AgentService that exposes:  # noqa: RST201
-
-    - A few authenticated endpoints for learning PDF and YouTube documents:
-
-         /index_url
-        { url }
-
-        /index_text
-        { text }
-
-    - An unauthenticated endpoint for answering questions about what it has learned
-
-    This agent provides a starter project for special purpose QA agents that can answer questions about documents
-    you provide.
-    """
 
     USED_MIXIN_CLASSES = [
         IndexerPipelineMixin,
@@ -45,17 +22,11 @@ class DocumentQAAgentService(AgentService):
         BlockifierMixin,
         IndexerMixin,
         SteamshipWidgetTransport,
-        TelegramTransport,
-        SlackTransport,
     ]
     """USED_MIXIN_CLASSES tells Steamship what additional HTTP endpoints to register on your AgentService."""
 
     class DocumentQAAgentServiceConfig(Config):
         """Pydantic definition of the user-settable Configuration of this Agent."""
-
-        telegram_bot_token: str = Field(
-            "", description="[Optional] Secret token for connecting to Telegram"
-        )
 
     config: DocumentQAAgentServiceConfig
     """The configuration block that users who create an instance of this agent will provide."""
@@ -114,22 +85,3 @@ class DocumentQAAgentService(AgentService):
             )
         )
 
-        # Support Slack
-        self.add_mixin(
-            SlackTransport(
-                client=self.client,
-                config=SlackTransportConfig(),
-                agent_service=self,
-            )
-        )
-
-        # Support Telegram
-        self.add_mixin(
-            TelegramTransport(
-                client=self.client,
-                config=TelegramTransportConfig(
-                    bot_token=self.config.telegram_bot_token
-                ),
-                agent_service=self,
-            )
-        )
