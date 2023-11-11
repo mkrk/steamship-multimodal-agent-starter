@@ -1,6 +1,6 @@
 {
 	"type": "package",
-	"handle": "question-answering-bot",
+	"handle": "mk-steamship-question-answering-bot",
 	"version": "1.0.2",
 	"description": "Learns from PDFs, YouTube videos, and text. Then answers questions about them in natural language.",
 	"author": "",
